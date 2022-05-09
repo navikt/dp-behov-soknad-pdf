@@ -13,9 +13,9 @@ class ManualHtmlBuilderTest {
         assertDoesNotThrow {
             testHtml.also { generertHtml ->
                 File("build/tmp/test/søknad.html").writeText(generertHtml)
-            /*    PdfBuilder().lagPdf(generertHtml).also { generertPdf ->
+                PdfBuilder().lagPdf(generertHtml).also { generertPdf ->
                     File("build/tmp/test/søknad.pdf").writeBytes(generertPdf)
-                }*/
+                }
             }
         }
     }

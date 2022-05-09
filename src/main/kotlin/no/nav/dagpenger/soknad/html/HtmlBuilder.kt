@@ -22,13 +22,14 @@ internal object HtmlBuilder {
                 title(htmlModell.metaInfo.tittel)
                 pdfa(htmlModell.pdfAKrav)
                 fontimports()
-                bookmarks(htmlModell)
+                bookmarks(htmlModell.seksjoner)
                 style {
                     søknadPdfStyle()
                 }
             }
             body {
                 h1 {
+                    id="hovedoverskrift"
                     +htmlModell.metaInfo.hovedOverskrift
                 }
                 div(classes = "infoblokk") {
@@ -38,6 +39,7 @@ internal object HtmlBuilder {
                 }
                 htmlModell.seksjoner.forEach { seksjon ->
                     div(classes = "seksjon") {
+                        id= seksjonId(seksjon.overskrift)
                         h2 { +seksjon.overskrift }
                         seksjon.spmSvar.forEach { spmDiv(it, språk) }
                     }

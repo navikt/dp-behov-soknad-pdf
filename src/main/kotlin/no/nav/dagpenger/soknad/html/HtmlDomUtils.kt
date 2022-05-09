@@ -4,10 +4,12 @@ import kotlinx.html.DIV
 import kotlinx.html.HEAD
 import kotlinx.html.div
 import kotlinx.html.h3
+import kotlinx.html.id
 import kotlinx.html.meta
 import kotlinx.html.p
 import kotlinx.html.span
 import kotlinx.html.unsafe
+import net.logstash.logback.argument.StructuredArguments.raw
 import no.nav.dagpenger.soknad.html.HtmlModell.PdfAKrav
 import no.nav.dagpenger.soknad.html.HtmlModell.SporsmalSvar
 import no.nav.dagpenger.soknad.html.HtmlModell.SøknadSpråk
@@ -41,18 +43,26 @@ internal fun HEAD.pdfa(pdfAKrav: PdfAKrav) {
     }
 }
 
-internal fun HEAD.bookmarks(htmlModell: HtmlModell) {
+internal fun HEAD.bookmarks(seksjoner: List<HtmlModell.Seksjon>) {
+
+    val seksjoner = seksjoner.map {
+        """<bookmark name = "${it.overskrift}" href="#${seksjonId(it.overskrift)}"></bookmark>"""
+    }.joinToString("")
+     print(seksjoner)
     unsafe {
         //language=HTML
         raw(
             """
                 <bookmarks>
                     <bookmark name="Søknad om dagpenger" href="#hovedoverskrift"></bookmark>
+                    $seksjoner
                     <bookmark name="Info om søknad" href="#infoblokk"></bookmark>
                 </bookmarks>
             """.trimIndent()
         )
     }
+
+    /*                      */
 }
 
 internal fun DIV.boldSpanP(boldTekst: String, vanligTekst: String, divider: String = ":") {
@@ -79,3 +89,5 @@ internal fun DIV.spmDiv(spmSvar: SporsmalSvar, språk: SøknadSpråk) {
         }
     }
 }
+
+internal fun seksjonId(overskrift: String)="seksjon-${overskrift.replace(" ","-").toLowerCase()}"
