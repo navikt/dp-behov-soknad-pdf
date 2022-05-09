@@ -8,6 +8,7 @@ import kotlinx.html.h1
 import kotlinx.html.h2
 import kotlinx.html.head
 import kotlinx.html.html
+import kotlinx.html.id
 import kotlinx.html.lang
 import kotlinx.html.style
 import kotlinx.html.title
@@ -21,6 +22,7 @@ internal object HtmlBuilder {
                 title(htmlModell.metaInfo.tittel)
                 pdfa(htmlModell.pdfAKrav)
                 fontimports()
+                bookmarks(htmlModell)
                 style {
                     søknadPdfStyle()
                 }
@@ -30,6 +32,7 @@ internal object HtmlBuilder {
                     +htmlModell.metaInfo.hovedOverskrift
                 }
                 div(classes = "infoblokk") {
+                    id="infoblokk"
                     boldSpanP(boldTekst = språk.fødselsnummer, vanligTekst = htmlModell.infoBlokk.fødselsnummer)
                     boldSpanP(boldTekst = språk.datoSendt, vanligTekst = htmlModell.infoBlokk.fødselsnummer)
                 }

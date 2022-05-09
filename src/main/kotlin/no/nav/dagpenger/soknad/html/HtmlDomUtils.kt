@@ -48,6 +48,7 @@ internal fun HEAD.bookmarks(htmlModell: HtmlModell) {
             """
                 <bookmarks>
                     <bookmark name="Søknad om dagpenger" href="#hovedoverskrift"></bookmark>
+                    <bookmark name="Info om søknad" href="#infoblokk"></bookmark>
                 </bookmarks>
             """.trimIndent()
         )
@@ -78,5 +79,3 @@ internal fun DIV.spmDiv(spmSvar: SporsmalSvar, språk: SøknadSpråk) {
         }
     }
 }
-
-internal fun divId(postFix: String) = "div-${postFix.lowercase()}"
