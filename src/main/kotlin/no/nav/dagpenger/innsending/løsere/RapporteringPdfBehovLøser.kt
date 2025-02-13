@@ -37,18 +37,19 @@ internal class RapporteringPdfBehovLøser(
     }
 
     init {
-        River(rapidsConnection).apply {
-            precondition { it.requireValue("@event_name", "behov") }
-            precondition { it.requireAllOrAny("@behov", listOf(BEHOV)) }
-            precondition { it.forbid("@løsning") }
-            validate { it.requireKey("ident") }
-            validate {
-                it.require(BEHOV) { behov ->
-                    behov.required("periodeId")
-                    behov.required("json")
+        River(rapidsConnection)
+            .apply {
+                precondition { it.requireValue("@event_name", "behov") }
+                precondition { it.requireAllOrAny("@behov", listOf(BEHOV)) }
+                precondition { it.forbid("@løsning") }
+                validate { it.requireKey("ident") }
+                validate {
+                    it.require(BEHOV) { behov ->
+                        behov.required("periodeId")
+                        behov.required("json")
+                    }
                 }
-            }
-        }.register(this)
+            }.register(this)
     }
 
     override fun onPacket(
@@ -77,18 +78,19 @@ internal class RapporteringPdfBehovLøser(
                             body(jsonTree),
                         )
 
-                    pdfLagring.lagrePdf(
-                        søknadUUid = periodeId,
-                        arkiverbartDokument = listOf(ArkiverbartDokument.netto(PdfBuilder.lagPdf(html))),
-                        fnr = ident,
-                    ).let {
-                        with(it.behovSvar()) {
-                            packet["@løsning"] =
-                                mapOf(
-                                    BEHOV to this,
-                                )
+                    pdfLagring
+                        .lagrePdf(
+                            søknadUUid = periodeId,
+                            arkiverbartDokument = listOf(ArkiverbartDokument.netto(PdfBuilder.lagPdf(html))),
+                            fnr = ident,
+                        ).let {
+                            with(it.behovSvar()) {
+                                packet["@løsning"] =
+                                    mapOf(
+                                        BEHOV to this,
+                                    )
+                            }
                         }
-                    }
 
                     with(packet.toJson()) {
                         context.publish(this)
@@ -102,24 +104,22 @@ internal class RapporteringPdfBehovLøser(
         }
     }
 
-    private fun head(tittel: String): HEAD.() -> Unit {
-        return {
+    private fun head(tittel: String): HEAD.() -> Unit =
+        {
             title(tittel)
             søknadPdfStyle()
         }
-    }
 
-    private fun body(json: JsonNode): BODY.() -> Unit {
-        return {
+    private fun body(json: JsonNode): BODY.() -> Unit =
+        {
             div(null, iterate(json, ""))
         }
-    }
 
     private fun iterate(
         json: JsonNode,
         indent: String,
-    ): DIV.() -> Unit {
-        return {
+    ): DIV.() -> Unit =
+        {
             val iterator = json.fields()
             while (iterator.hasNext()) {
                 val item = iterator.next()
@@ -135,5 +135,4 @@ internal class RapporteringPdfBehovLøser(
                 }
             }
         }
-    }
 }

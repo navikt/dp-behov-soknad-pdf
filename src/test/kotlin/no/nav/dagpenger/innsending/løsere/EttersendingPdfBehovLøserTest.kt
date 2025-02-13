@@ -117,7 +117,9 @@ internal class EttersendingPdfBehovLøserTest {
         "innsendtTidspunkt": "${ZonedDateTime.now(ZoneId.of("Europe/Oslo"))}}"
         """.trimIndent()
 
-    internal class MockInnsendingSupplier(val innsending: Innsending) {
+    internal class MockInnsendingSupplier(
+        val innsending: Innsending,
+    ) {
         var kopiertInnsending: Innsending? = null
 
         fun hentEttersending(
@@ -126,10 +128,9 @@ internal class EttersendingPdfBehovLøserTest {
             innsendtTidspunkt: ZonedDateTime,
             språk: Innsending.InnsendingsSpråk,
             block: Innsending.() -> Innsending,
-        ): Innsending {
-            return innsending.block().also {
+        ): Innsending =
+            innsending.block().also {
                 kopiertInnsending = it
             }
-        }
     }
 }

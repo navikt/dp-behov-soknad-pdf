@@ -23,18 +23,20 @@ class FaktaUtenSvarTest {
                 dokumentasjonKrav = dokumentasjonKravJson,
                 tekst = tekstJson,
                 språk = Innsending.InnsendingsSpråk.BOKMÅL,
-            ).parse().apply {
-                infoBlokk =
-                    Innsending.InfoBlokk(
-                        fødselsnummer = "ident",
-                        innsendtTidspunkt = ZonedDateTime.now(),
-                        navn = "Ola Nordmann",
-                        adresse = "Kardemomme By, 4609 Kristiansand, Norge",
-                    )
-            }.let {
-                PdfBuilder.lagPdf(HtmlBuilder.lagBruttoHtml(it))
-                    .let { pdf -> File("build/tmp/test/bug_tom_svar.pdf").writeBytes(pdf) }
-            }
+            ).parse()
+                .apply {
+                    infoBlokk =
+                        Innsending.InfoBlokk(
+                            fødselsnummer = "ident",
+                            innsendtTidspunkt = ZonedDateTime.now(),
+                            navn = "Ola Nordmann",
+                            adresse = "Kardemomme By, 4609 Kristiansand, Norge",
+                        )
+                }.let {
+                    PdfBuilder
+                        .lagPdf(HtmlBuilder.lagBruttoHtml(it))
+                        .let { pdf -> File("build/tmp/test/bug_tom_svar.pdf").writeBytes(pdf) }
+                }
         }
     }
 }

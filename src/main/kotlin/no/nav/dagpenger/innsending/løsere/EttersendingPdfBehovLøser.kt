@@ -40,14 +40,15 @@ internal class EttersendingPdfBehovLøser(
     }
 
     init {
-        River(rapidsConnection).apply {
-            precondition { it.requireValue("@event_name", "behov") }
-            precondition { it.requireAllOrAny("@behov", listOf(BEHOV)) }
-            precondition { it.forbid("@løsning") }
-            validate { it.requireKey("søknad_uuid", "ident", "innsendtTidspunkt", "dokumentasjonKravId") }
-            validate { it.requireValue("type", "ETTERSENDING_TIL_DIALOG") }
-            validate { it.interestedIn("dokument_språk") }
-        }.register(this)
+        River(rapidsConnection)
+            .apply {
+                precondition { it.requireValue("@event_name", "behov") }
+                precondition { it.requireAllOrAny("@behov", listOf(BEHOV)) }
+                precondition { it.forbid("@løsning") }
+                validate { it.requireKey("søknad_uuid", "ident", "innsendtTidspunkt", "dokumentasjonKravId") }
+                validate { it.requireValue("type", "ETTERSENDING_TIL_DIALOG") }
+                validate { it.interestedIn("dokument_språk") }
+            }.register(this)
     }
 
     override fun onPacket(
@@ -72,15 +73,16 @@ internal class EttersendingPdfBehovLøser(
                     ) { this.filtrerInnsendteDokumentasjonsKrav(innsendtDokumentajonsKravId) }
                         .let { lagArkiverbarEttersending(it) }
                         .let { dokumenter ->
-                            pdfLagring.lagrePdf(
-                                søknadUUid = soknadId.toString(),
-                                arkiverbartDokument = dokumenter,
-                                fnr = ident,
-                            ).let {
-                                with(it.behovSvar()) {
-                                    packet["@løsning"] = mapOf(BEHOV to this)
+                            pdfLagring
+                                .lagrePdf(
+                                    søknadUUid = soknadId.toString(),
+                                    arkiverbartDokument = dokumenter,
+                                    fnr = ident,
+                                ).let {
+                                    with(it.behovSvar()) {
+                                        packet["@løsning"] = mapOf(BEHOV to this)
+                                    }
                                 }
-                            }
                         }
                     with(packet.toJson()) {
                         context.publish(this)
@@ -100,13 +102,13 @@ private fun JsonMessage.innsendtDokumentajonsKravId(): Set<String> {
     return (this["dokumentasjonKravId"] as ArrayNode).map { it.asText() }.toSet()
 }
 
-private fun Innsending.filtrerInnsendteDokumentasjonsKrav(innsendtDokumentajonsKravId: Set<String>): Innsending {
-    return this.copy(
-        dokumentasjonskrav =
-            this.dokumentasjonskrav.filter { dokumentKrav ->
-                dokumentKrav.kravId in innsendtDokumentajonsKravId
-            },
-    ).also {
-        it.infoBlokk = this.infoBlokk
-    }
-}
+private fun Innsending.filtrerInnsendteDokumentasjonsKrav(innsendtDokumentajonsKravId: Set<String>): Innsending =
+    this
+        .copy(
+            dokumentasjonskrav =
+                this.dokumentasjonskrav.filter { dokumentKrav ->
+                    dokumentKrav.kravId in innsendtDokumentajonsKravId
+                },
+        ).also {
+            it.infoBlokk = this.infoBlokk
+        }

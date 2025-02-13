@@ -68,7 +68,7 @@ internal object Configuration {
     private fun azureAdTokenSupplier(scope: String): () -> String =
         {
             runBlocking {
-                azureAdClient.clientCredentials(scope).accessToken
+                azureAdClient.clientCredentials(scope).access_token
                     ?: throw IllegalStateException("Fikk ikke tak i token")
             }
         }

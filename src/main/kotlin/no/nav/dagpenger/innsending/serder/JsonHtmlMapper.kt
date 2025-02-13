@@ -31,8 +31,8 @@ internal class JsonHtmlMapper(
     private val oppslag = Oppslag(tekst)
     private val objectMapper = jacksonObjectMapper()
 
-    private fun parse(innsendingsData: String?): List<Innsending.Seksjon> {
-        return innsendingsData?.let {
+    private fun parse(innsendingsData: String?): List<Innsending.Seksjon> =
+        innsendingsData?.let {
             objectMapper.readTree(innsendingsData)["seksjoner"].map {
                 val tekstObjekt = oppslag.lookup<SeksjonTekstObjekt>(it["beskrivendeId"].asText())
                 Innsending.Seksjon(
@@ -43,10 +43,9 @@ internal class JsonHtmlMapper(
                 )
             }
         } ?: emptyList()
-    }
 
-    private fun parseDokumentkrav(dokumentasjonKrav: String): List<Innsending.DokumentKrav> {
-        return objectMapper.readTree(dokumentasjonKrav)["krav"].filter { it.has("svar") }.map { krav ->
+    private fun parseDokumentkrav(dokumentasjonKrav: String): List<Innsending.DokumentKrav> =
+        objectMapper.readTree(dokumentasjonKrav)["krav"].filter { it.has("svar") }.map { krav ->
             val kravId = krav["id"].asText()
             val kravSvar = krav["beskrivelse"]?.asText()
             val valg = Innsending.DokumentKrav.Valg.fromJson(krav["svar"].asText())
@@ -75,10 +74,9 @@ internal class JsonHtmlMapper(
                     )
             }
         }
-    }
 
-    private fun JsonNode.sjekkSvarFinnes(block: () -> Svar): Svar {
-        return when {
+    private fun JsonNode.sjekkSvarFinnes(block: () -> Svar): Svar =
+        when {
             this.has("svar") -> {
                 block.invoke()
             }
@@ -88,49 +86,48 @@ internal class JsonHtmlMapper(
                 Innsending.IngenSvar
             }
         }
-    }
 
-    private fun JsonNode.svar(): Svar {
-        return kotlin.runCatching {
-            when (val type = this["type"].asText()) {
-                "tekst" -> this.sjekkSvarFinnes { EnkeltSvar(this["svar"].asText()) }
-                "double" -> this.sjekkSvarFinnes { EnkeltSvar(this["svar"].asText()) }
-                "int" -> this.sjekkSvarFinnes { EnkeltSvar(this["svar"].asText()) }
-                "boolean" -> this.sjekkSvarFinnes { Innsending.ValgSvar(this.booleanEnValg()) }
-                "localdate" -> this.sjekkSvarFinnes { EnkeltSvar(this["svar"].asLocalDate().dagMånedÅr()) }
-                "periode" ->
-                    this.sjekkSvarFinnes {
-                        listOf(
-                            this["svar"]["fom"].asLocalDate().dagMånedÅr(),
-                            this["svar"]["tom"]?.asLocalDate()?.dagMånedÅr() ?: "",
-                        ).let {
-                            EnkeltSvar(it.joinToString(" - "))
+    private fun JsonNode.svar(): Svar =
+        kotlin
+            .runCatching {
+                when (val type = this["type"].asText()) {
+                    "tekst" -> this.sjekkSvarFinnes { EnkeltSvar(this["svar"].asText()) }
+                    "double" -> this.sjekkSvarFinnes { EnkeltSvar(this["svar"].asText()) }
+                    "int" -> this.sjekkSvarFinnes { EnkeltSvar(this["svar"].asText()) }
+                    "boolean" -> this.sjekkSvarFinnes { Innsending.ValgSvar(this.booleanEnValg()) }
+                    "localdate" -> this.sjekkSvarFinnes { EnkeltSvar(this["svar"].asLocalDate().dagMånedÅr()) }
+                    "periode" ->
+                        this.sjekkSvarFinnes {
+                            listOf(
+                                this["svar"]["fom"].asLocalDate().dagMånedÅr(),
+                                this["svar"]["tom"]?.asLocalDate()?.dagMånedÅr() ?: "",
+                            ).let {
+                                EnkeltSvar(it.joinToString(" - "))
+                            }
                         }
-                    }
 
-                "generator" -> Innsending.IngenSvar
-                "envalg" -> this.sjekkSvarFinnes { Innsending.ValgSvar(this.envalg()) }
-                "flervalg" -> this.sjekkSvarFinnes { Innsending.ValgSvar(this.flerValg()) }
-                "land" -> this.sjekkSvarFinnes { EnkeltSvar(LandOppslag.hentLand(språk, this["svar"].asText())) }
-                "dokument" ->
-                    this.sjekkSvarFinnes {
-                        logg.warn { "Fant dokument i fakta: ${this.dokumentTekst()}" }
-                        Innsending.IngenSvar
-                    }
+                    "generator" -> Innsending.IngenSvar
+                    "envalg" -> this.sjekkSvarFinnes { Innsending.ValgSvar(this.envalg()) }
+                    "flervalg" -> this.sjekkSvarFinnes { Innsending.ValgSvar(this.flerValg()) }
+                    "land" -> this.sjekkSvarFinnes { EnkeltSvar(LandOppslag.hentLand(språk, this["svar"].asText())) }
+                    "dokument" ->
+                        this.sjekkSvarFinnes {
+                            logg.warn { "Fant dokument i fakta: ${this.dokumentTekst()}" }
+                            Innsending.IngenSvar
+                        }
 
-                else -> throw IllegalArgumentException("Ukjent faktumtype $type")
-            }
-        }.fold(
-            onSuccess = { it },
-            onFailure = { e ->
-                sikkerlogg.error { "Kunne ikke parse json node: $this" }
-                throw e
-            },
-        )
-    }
+                    else -> throw IllegalArgumentException("Ukjent faktumtype $type")
+                }
+            }.fold(
+                onSuccess = { it },
+                onFailure = { e ->
+                    sikkerlogg.error { "Kunne ikke parse json node: $this" }
+                    throw e
+                },
+            )
 
-    private fun JsonNode.envalg(): List<Innsending.SvarAlternativ> {
-        return oppslag.lookup<SvaralternativTekstObjekt>(this["svar"].asText()).let { jsonAlternativ ->
+    private fun JsonNode.envalg(): List<Innsending.SvarAlternativ> =
+        oppslag.lookup<SvaralternativTekstObjekt>(this["svar"].asText()).let { jsonAlternativ ->
             listOf(
                 Innsending.SvarAlternativ(
                     jsonAlternativ.text,
@@ -138,10 +135,9 @@ internal class JsonHtmlMapper(
                 ),
             )
         }
-    }
 
-    private fun JsonNode.booleanEnValg(): List<Innsending.SvarAlternativ> {
-        return oppslag.lookup<SvaralternativTekstObjekt>(this.booleanTextId()).let { jsonAlternativ ->
+    private fun JsonNode.booleanEnValg(): List<Innsending.SvarAlternativ> =
+        oppslag.lookup<SvaralternativTekstObjekt>(this.booleanTextId()).let { jsonAlternativ ->
             listOf(
                 Innsending.SvarAlternativ(
                     jsonAlternativ.text,
@@ -149,10 +145,9 @@ internal class JsonHtmlMapper(
                 ),
             )
         }
-    }
 
-    private fun JsonNode.flerValg(): List<Innsending.SvarAlternativ> {
-        return when (this["type"].asText()) {
+    private fun JsonNode.flerValg(): List<Innsending.SvarAlternativ> =
+        when (this["type"].asText()) {
             "flervalg" ->
                 this["svar"].toList().map { jsonNode ->
                     val jsonAlternativ = oppslag.lookup<SvaralternativTekstObjekt>(jsonNode.asText())
@@ -164,10 +159,9 @@ internal class JsonHtmlMapper(
 
             else -> emptyList()
         }
-    }
 
-    private fun alertText(tekstObjekt: SvaralternativTekstObjekt): Innsending.InfoTekst? {
-        return tekstObjekt.alertText?.let { alerttext ->
+    private fun alertText(tekstObjekt: SvaralternativTekstObjekt): Innsending.InfoTekst? =
+        tekstObjekt.alertText?.let { alerttext ->
             Innsending.Infotype.fraSanityJson(typenøkkel = alerttext.type)?.let { infotype ->
                 Innsending.InfoTekst.nyEllerNull(
                     tittel = alerttext.title,
@@ -176,10 +170,9 @@ internal class JsonHtmlMapper(
                 )
             }
         }
-    }
 
-    private fun JsonNode.generatorfakta(): List<Innsending.SpørmsålOgSvarGruppe> {
-        return when (this["type"].asText()) {
+    private fun JsonNode.generatorfakta(): List<Innsending.SpørmsålOgSvarGruppe> =
+        when (this["type"].asText()) {
             "generator" ->
                 this["svar"]?.toList()?.map { liste ->
                     Innsending.SpørmsålOgSvarGruppe(
@@ -199,10 +192,9 @@ internal class JsonHtmlMapper(
 
             else -> emptyList()
         }
-    }
 
-    private fun JsonNode.fakta(): List<Innsending.SporsmalSvar> {
-        return this["fakta"].map { node ->
+    private fun JsonNode.fakta(): List<Innsending.SporsmalSvar> =
+        this["fakta"].map { node ->
             val tekstObjekt = oppslag.lookup<FaktaTekstObjekt>(node["beskrivendeId"].asText())
             Innsending.SporsmalSvar(
                 sporsmal = tekstObjekt.text,
@@ -212,10 +204,9 @@ internal class JsonHtmlMapper(
                 oppfølgingspørmål = node.generatorfakta(),
             )
         }
-    }
 
-    fun parse(innsendingType: InnsendingSupplier.InnsendingType = InnsendingSupplier.InnsendingType.DAGPENGER): Innsending {
-        return Innsending(
+    fun parse(innsendingType: InnsendingSupplier.InnsendingType = InnsendingSupplier.InnsendingType.DAGPENGER): Innsending =
+        Innsending(
             seksjoner = parse(innsendingsData),
             generellTekst = oppslag.generellTekst(innsendingType),
             språk = språk,
@@ -223,17 +214,15 @@ internal class JsonHtmlMapper(
             dokumentasjonskrav = parseDokumentkrav(dokumentasjonKrav),
             type = innsendingType,
         )
-    }
 
-    fun parseEttersending(): Innsending {
-        return Innsending(
+    fun parseEttersending(): Innsending =
+        Innsending(
             seksjoner = emptyList(),
             generellTekst = oppslag.generellTekstEttersending(),
             språk = språk,
             pdfAMetaTagger = oppslag.pdfaMetaTags(),
             dokumentasjonskrav = parseDokumentkrav(dokumentasjonKrav),
         )
-    }
 }
 
 private fun JsonNode.booleanTextId(): String {
@@ -254,9 +243,8 @@ private fun LocalDate.dagMånedÅr(): String = this.format(DateTimeFormatter.ofP
 
 private fun LocalDateTime.dagMånedÅr(): String = this.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 
-private fun TekstObjekt.hjelpetekst(): Innsending.Hjelpetekst? {
-    return this.helpText?.let { oppslag ->
+private fun TekstObjekt.hjelpetekst(): Innsending.Hjelpetekst? =
+    this.helpText?.let { oppslag ->
         val unsafeHtml = oppslag.body?.let { Innsending.UnsafeHtml(it.html) }
         Innsending.Hjelpetekst.nyEllerNull(unsafeHtmlBody = unsafeHtml, tittel = oppslag.title)
     }
-}

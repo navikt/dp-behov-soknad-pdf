@@ -41,7 +41,9 @@ data class Adresse(
         }
 }
 
-internal class AdresseMapper(pdlAdresser: List<PDLAdresse>) {
+internal class AdresseMapper(
+    pdlAdresser: List<PDLAdresse>,
+) {
     val folkeregistertAdresse: Adresse?
     val postAdresse: Adresse?
 
@@ -57,7 +59,9 @@ internal class AdresseMapper(pdlAdresser: List<PDLAdresse>) {
 }
 
 internal object PDLAdresseMapper : AdresseMapper<Adresse>() {
-    private class GeografiOppslagInitException(e: Exception) : RuntimeException(e)
+    private class GeografiOppslagInitException(
+        e: Exception,
+    ) : RuntimeException(e)
 
     private object PostDataDao {
         private val dao: PostDataDAO =
@@ -67,11 +71,10 @@ internal object PDLAdresseMapper : AdresseMapper<Adresse>() {
                 throw GeografiOppslagInitException(e)
             }
 
-        fun finnPoststed(postNummer: String?): String? {
-            return postNummer?.let {
+        fun finnPoststed(postNummer: String?): String? =
+            postNummer?.let {
                 dao.findPostData(postNummer).map { it.capitalizedCityName }.orElse(null)
             }
-        }
     }
 
     private object LandDataDAO {
@@ -82,9 +85,7 @@ internal object PDLAdresseMapper : AdresseMapper<Adresse>() {
                 throw GeografiOppslagInitException(e)
             }
 
-        fun finnLand(landKode: String?): Country? {
-            return landKode?.let { dao.findCountryByCode(it).orElse(null) }
-        }
+        fun finnLand(landKode: String?): Country? = landKode?.let { dao.findCountryByCode(it).orElse(null) }
     }
 
     override fun formatertAdresse(pdlAdresse: PDLAdresse.MatrikkelAdresse): Adresse = Adresse()

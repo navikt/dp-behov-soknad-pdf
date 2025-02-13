@@ -18,7 +18,9 @@ import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import java.lang.ClassCastException
 
-internal class Oppslag(private val tekstJson: String) {
+internal class Oppslag(
+    private val tekstJson: String,
+) {
     companion object {
         private val logg = KotlinLogging.logger {}
 
@@ -58,8 +60,8 @@ internal class Oppslag(private val tekstJson: String) {
     private val objectMapper = jacksonObjectMapper()
     private val tekstMap = parse(tekstJson)
 
-    private fun parse(tekstJson: String): Map<String, TekstObjekt> {
-        return try {
+    private fun parse(tekstJson: String): Map<String, TekstObjekt> =
+        try {
             objectMapper.readTree(tekstJson).let {
                 it.tilFaktaTekstObjekt() + it.tilSeksjonTekstObjekt() +
                     it.tilSvarAlternativTekstObjekt() + it.tilAppTekstObjekt() +
@@ -69,7 +71,6 @@ internal class Oppslag(private val tekstJson: String) {
             logg.error(e) { "Fikk NullPointerException ved parsing av tekster: $tekstJson" }
             throw e
         }
-    }
 
     private fun JsonNode.tilFaktaTekstObjekt(): Map<String, TekstObjekt> {
         val map = mutableMapOf<String, TekstObjekt>()
@@ -121,8 +122,8 @@ internal class Oppslag(private val tekstJson: String) {
         return map
     }
 
-    private fun JsonNode.tilDokumentkravTekstObjekt(): Map<String, TekstObjekt> {
-        return dokumentkrav().associate { dokumentkrav ->
+    private fun JsonNode.tilDokumentkravTekstObjekt(): Map<String, TekstObjekt> =
+        dokumentkrav().associate { dokumentkrav ->
             val textId = dokumentkrav["textId"].asText()
             val title: String =
                 when {
@@ -151,7 +152,6 @@ internal class Oppslag(private val tekstJson: String) {
                     )
             }
         }
-    }
 
     private fun JsonNode.tilSvarAlternativTekstObjekt(): Map<String, TekstObjekt> {
         val map = mutableMapOf<String, TekstObjekt>()
@@ -229,7 +229,11 @@ internal class Oppslag(private val tekstJson: String) {
             )
         }
 
-    sealed class TekstObjekt(val textId: String, val description: RawHtmlString?, val helpText: HelpText?) {
+    sealed class TekstObjekt(
+        val textId: String,
+        val description: RawHtmlString?,
+        val helpText: HelpText?,
+    ) {
         class FaktaTekstObjekt(
             val unit: String? = null,
             val text: String,
@@ -245,12 +249,22 @@ internal class Oppslag(private val tekstJson: String) {
             helpText: HelpText? = null,
         ) : TekstObjekt(textId, description, helpText)
 
-        class SvaralternativTekstObjekt(val text: String, val alertText: AlertText?, textId: String) :
-            TekstObjekt(textId, null, null)
+        class SvaralternativTekstObjekt(
+            val text: String,
+            val alertText: AlertText?,
+            textId: String,
+        ) : TekstObjekt(textId, null, null)
 
-        class EnkelText(textId: String, val text: String) : TekstObjekt(textId, null, null)
+        class EnkelText(
+            textId: String,
+            val text: String,
+        ) : TekstObjekt(textId, null, null)
 
-        class AlertText(val title: String?, val type: String, val body: RawHtmlString?) {
+        class AlertText(
+            val title: String?,
+            val type: String,
+            val body: RawHtmlString?,
+        ) {
             init {
                 if (!listOf("info", "warning", "error", "succes").contains(type)) {
                     throw IllegalArgumentException("Ukjent type for alertText $type")
@@ -265,7 +279,10 @@ internal class Oppslag(private val tekstJson: String) {
             helpText: HelpText? = null,
         ) : TekstObjekt(textId, description, helpText)
 
-        class HelpText(val title: String?, val body: RawHtmlString?)
+        class HelpText(
+            val title: String?,
+            val body: RawHtmlString?,
+        )
     }
 }
 
@@ -275,10 +292,11 @@ private fun JsonNode.asRawHtmlString(): RawHtmlString? =
         this is ArrayNode -> this.toList().joinToString(separator = "") { it.asText() }
         isNull -> null
         else -> throw UgyldigHtmlError(this.toPrettyString())
-    }
-        .let { RawHtmlString.nyEllerNull(it) }
+    }.let { RawHtmlString.nyEllerNull(it) }
 
-class RawHtmlString private constructor(htmlFraSanity: String) {
+class RawHtmlString private constructor(
+    htmlFraSanity: String,
+) {
     val html: String = Jsoup.clean(htmlFraSanity, tilatteTaggerOgAttributter)
 
     companion object {
@@ -309,4 +327,6 @@ private fun JsonNode.fakta() = this["sanityTexts"]["fakta"]
 
 private fun JsonNode.apptekster(): JsonNode = this["sanityTexts"]["apptekster"]
 
-class UgyldigHtmlError(htmlString: String) : IllegalArgumentException("Mottok ugyldig HTML: $htmlString")
+class UgyldigHtmlError(
+    htmlString: String,
+) : IllegalArgumentException("Mottok ugyldig HTML: $htmlString")

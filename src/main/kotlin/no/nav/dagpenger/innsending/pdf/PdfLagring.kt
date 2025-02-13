@@ -46,36 +46,37 @@ class PdfLagring(
         søknadUUid: String,
         arkiverbartDokument: List<ArkiverbartDokument>,
         fnr: String,
-    ): List<LagretDokument> {
-        return httpKlient.submitFormWithBinaryData(
-            url = "$baseUrl/$søknadUUid",
-            formData =
-                formData {
-                    arkiverbartDokument.forEach {
-                        append(
-                            it.filnavn,
-                            it.pdf,
-                            Headers.build {
-                                append(HttpHeaders.ContentType, ContentType.Application.Pdf.toString())
-                                append(HttpHeaders.ContentDisposition, "filename=${it.filnavn}")
-                            },
-                        )
+    ): List<LagretDokument> =
+        httpKlient
+            .submitFormWithBinaryData(
+                url = "$baseUrl/$søknadUUid",
+                formData =
+                    formData {
+                        arkiverbartDokument.forEach {
+                            append(
+                                it.filnavn,
+                                it.pdf,
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, ContentType.Application.Pdf.toString())
+                                    append(HttpHeaders.ContentDisposition, "filename=${it.filnavn}")
+                                },
+                            )
+                        }
+                    },
+            ) {
+                this.header("X-Eier", fnr)
+            }.body<List<URNResponse>>()
+            .map {
+                val a2 =
+                    arkiverbartDokument.single { a ->
+                        a.filnavn == it.filnavn
                     }
-                },
-        ) {
-            this.header("X-Eier", fnr)
-        }.body<List<URNResponse>>().map {
-            val a2 =
-                arkiverbartDokument.single { a ->
-                    a.filnavn == it.filnavn
-                }
-            LagretDokument(
-                urn = it.urn,
-                variant = a2.variant,
-                filnavn = it.filnavn,
-            )
-        }
-    }
+                LagretDokument(
+                    urn = it.urn,
+                    variant = a2.variant,
+                    filnavn = it.filnavn,
+                )
+            }
 }
 
 internal data class URNResponse(

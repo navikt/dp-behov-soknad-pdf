@@ -53,7 +53,11 @@ internal class SerderTest {
             PdfBuilder.lagPdf(it)
             assertEquals(
                 0,
-                Jsoup.parse(it).getElementsByClass("hjelpetekst").filter { t -> t.childrenSize() < 1 }.size,
+                Jsoup
+                    .parse(it)
+                    .getElementsByClass("hjelpetekst")
+                    .filter { t -> t.childrenSize() < 1 }
+                    .size,
                 "fant tomme hjelpetekster",
             )
         }
@@ -81,7 +85,13 @@ internal class SerderTest {
                 "Her blir det spurt om noe som du kan svare ja eller nei på. Svarer du ja eller nei?",
                 it.text,
             )
-            assertEquals("<p>Hjelpetekst</p>", it.helpText?.body?.html?.replace(" ", ""))
+            assertEquals(
+                "<p>Hjelpetekst</p>",
+                it.helpText
+                    ?.body
+                    ?.html
+                    ?.replace(" ", ""),
+            )
             assertNull(it.description)
         }
     }

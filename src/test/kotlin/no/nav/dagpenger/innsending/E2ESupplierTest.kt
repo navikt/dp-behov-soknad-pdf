@@ -38,22 +38,26 @@ internal class E2ESupplierTest {
         // IF this fails do kubectl get pod to aquire credentials
         val client: ApiClient = ClientBuilder.kubeconfig(KubeConfig.loadKubeConfig(FileReader(kubeConfigPath))).build()
         Configuration.setDefaultApiClient(client)
-        return CoreV1Api().listNamespacedSecret(
-            "teamdagpenger",
-            null,
-            null,
-            null,
-            null,
-            "app=$app,type=$type",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-        ).items.also { secrets ->
-            secrets.sortByDescending<V1Secret?, OffsetDateTime> { it?.metadata?.creationTimestamp }
-        }.first<V1Secret?>()?.data!!.mapValues { e -> String(e.value) }
+        return CoreV1Api()
+            .listNamespacedSecret(
+                "teamdagpenger",
+                null,
+                null,
+                null,
+                null,
+                "app=$app,type=$type",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+            ).items
+            .also { secrets ->
+                secrets.sortByDescending<V1Secret?, OffsetDateTime> { it?.metadata?.creationTimestamp }
+            }.first<V1Secret?>()
+            ?.data!!
+            .mapValues { e -> String(e.value) }
     }
 
     fun getAzureAdToken(
@@ -71,7 +75,7 @@ internal class E2ESupplierTest {
             )
         }
 
-        return tokenAzureAdClient.clientCredentials(scope).accessToken ?: throw IllegalStateException("Kunne ikke få tak i token")
+        return tokenAzureAdClient.clientCredentials(scope).access_token ?: throw IllegalStateException("Kunne ikke få tak i token")
     }
 
     val mockPersonaliaOppslag =
@@ -122,17 +126,18 @@ internal class E2ESupplierTest {
         runBlocking {
             ids.forEach { id ->
                 val uuid = UUID.fromString(id.second)
-                innsendingSupplier.hentSoknad(
-                    id = uuid,
-                    fnr = id.first,
-                    innsendtTidspunkt = ZonedDateTime.now(),
-                    språk = BOKMÅL,
-                    innsendingType = innsendingType,
-                ).let { innsending ->
-                    lagArkiverbartDokument(innsending).forEach { doc ->
-                        File("./build/tmp/søknad-${doc.variant.name}.pdf").writeBytes(doc.pdf)
+                innsendingSupplier
+                    .hentSoknad(
+                        id = uuid,
+                        fnr = id.first,
+                        innsendtTidspunkt = ZonedDateTime.now(),
+                        språk = BOKMÅL,
+                        innsendingType = innsendingType,
+                    ).let { innsending ->
+                        lagArkiverbartDokument(innsending).forEach { doc ->
+                            File("./build/tmp/søknad-${doc.variant.name}.pdf").writeBytes(doc.pdf)
+                        }
                     }
-                }
 
                 innsendingSupplier.hentDokumentasjonKrav(uuid).also {
                     File("./build/tmp/dokkrav-$id.json").writeText(it)

@@ -30,9 +30,12 @@ internal class PdfBuilderTest {
             val validator = foundry.createValidator(PDFAFlavour.PDFA_2_U, true)
             foundry.createParser(pdf, PDFAFlavour.PDFA_2_U).also { parser ->
                 val result =
-                    validator.validate(parser).testAssertions.filter {
-                        it.status == TestAssertion.Status.FAILED
-                    }.distinctBy { it.ruleId }
+                    validator
+                        .validate(parser)
+                        .testAssertions
+                        .filter {
+                            it.status == TestAssertion.Status.FAILED
+                        }.distinctBy { it.ruleId }
                 assertTrue(
                     result.isEmpty(),
                     "PDF-A verifisering feiler på :\n ${result.map { it.ruleId }}," +

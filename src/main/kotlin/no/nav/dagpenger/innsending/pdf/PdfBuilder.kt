@@ -44,26 +44,26 @@ internal object PdfBuilder {
             ),
         )
 
-    internal fun lagPdf(html: String): ByteArray {
-        return try {
+    internal fun lagPdf(html: String): ByteArray =
+        try {
             ByteArrayOutputStream().use {
-                PdfRendererBuilder().apply {
-                    fonts.forEach { font ->
-                        useFont(
-                            // supplier =
-                            font.inputStreamSupplier(),
-                            // fontFamily =
-                            font.family,
-                            // fontWeight =
-                            font.weight,
-                            // fontStyle =
-                            font.style,
-                            // subset =
-                            font.subset,
-                        )
-                    }
-                }
-                    .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_2_U)
+                PdfRendererBuilder()
+                    .apply {
+                        fonts.forEach { font ->
+                            useFont(
+                                // supplier =
+                                font.inputStreamSupplier(),
+                                // fontFamily =
+                                font.family,
+                                // fontWeight =
+                                font.weight,
+                                // fontStyle =
+                                font.style,
+                                // subset =
+                                font.subset,
+                            )
+                        }
+                    }.usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_2_U)
                     .usePdfUaAccessbility(true)
                     .useColorProfile("/sRGB2014.icc".fileAsByteArray())
                     .defaultTextDirection(BaseRendererBuilder.TextDirection.LTR)
@@ -76,5 +76,4 @@ internal object PdfBuilder {
             sikkerlogg.error(e) { "Kunne ikke lage PDF av søknaden. HTML=$html" }
             throw e
         }
-    }
 }

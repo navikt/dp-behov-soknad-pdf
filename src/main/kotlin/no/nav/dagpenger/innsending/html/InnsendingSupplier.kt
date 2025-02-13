@@ -48,8 +48,8 @@ internal class InnsendingSupplier(
         innsendtTidspunkt: ZonedDateTime,
         språk: Innsending.InnsendingsSpråk,
         innsendingType: InnsendingType,
-    ): Innsending {
-        return withContext(Dispatchers.IO) {
+    ): Innsending =
+        withContext(Dispatchers.IO) {
             val fakta = async { hentFakta(id) }
             val tekst = async { hentTekst(id) }
             val dokumentasjonsKrav = async { hentDokumentasjonKrav(id) }
@@ -70,7 +70,6 @@ internal class InnsendingSupplier(
                     )
             }
         }
-    }
 
     suspend fun hentEttersending(
         id: UUID,
@@ -78,8 +77,8 @@ internal class InnsendingSupplier(
         innsendtTidspunkt: ZonedDateTime,
         språk: Innsending.InnsendingsSpråk,
         innsendingCopyFunc: Innsending.() -> Innsending = { this },
-    ): Innsending {
-        return withContext(Dispatchers.IO) {
+    ): Innsending =
+        withContext(Dispatchers.IO) {
             val tekst = async { hentTekst(id) }
             val dokumentasjonsKrav = async { hentDokumentasjonKrav(id) }
             val deferredPerson = async { personaliOppslag.hentPerson(fnr) }
@@ -88,28 +87,23 @@ internal class InnsendingSupplier(
                 dokumentasjonKrav = dokumentasjonsKrav.await(),
                 tekst = tekst.await(),
                 språk = språk,
-            ).parseEttersending().also {
-                val person = deferredPerson.await()
-                it.infoBlokk =
-                    Innsending.InfoBlokk(
-                        fødselsnummer = fnr,
-                        innsendtTidspunkt = innsendtTidspunkt,
-                        navn = person.navn.formatertNavn,
-                        adresse = person.adresse.formatertAdresse,
-                    )
-            }.innsendingCopyFunc()
+            ).parseEttersending()
+                .also {
+                    val person = deferredPerson.await()
+                    it.infoBlokk =
+                        Innsending.InfoBlokk(
+                            fødselsnummer = fnr,
+                            innsendtTidspunkt = innsendtTidspunkt,
+                            navn = person.navn.formatertNavn,
+                            adresse = person.adresse.formatertAdresse,
+                        )
+                }.innsendingCopyFunc()
         }
-    }
 
-    internal suspend fun hentFakta(id: UUID): String {
-        return httpKlient.get("$dpSoknadBaseUrl/$id/ferdigstilt/fakta").bodyAsText()
-    }
+    internal suspend fun hentFakta(id: UUID): String = httpKlient.get("$dpSoknadBaseUrl/$id/ferdigstilt/fakta").bodyAsText()
 
-    internal suspend fun hentTekst(id: UUID): String {
-        return httpKlient.get("$dpSoknadBaseUrl/$id/ferdigstilt/tekst").bodyAsText()
-    }
+    internal suspend fun hentTekst(id: UUID): String = httpKlient.get("$dpSoknadBaseUrl/$id/ferdigstilt/tekst").bodyAsText()
 
-    internal suspend fun hentDokumentasjonKrav(id: UUID): String {
-        return httpKlient.get("$dpSoknadBaseUrl/soknad/$id/dokumentasjonskrav").bodyAsText()
-    }
+    internal suspend fun hentDokumentasjonKrav(id: UUID): String =
+        httpKlient.get("$dpSoknadBaseUrl/soknad/$id/dokumentasjonskrav").bodyAsText()
 }

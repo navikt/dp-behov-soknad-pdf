@@ -101,11 +101,12 @@ internal object HtmlBuilder {
         head: HEAD.() -> Unit = {},
         body: BODY.() -> Unit = {},
     ): String {
-        return createHTML(prettyPrint = false, xhtmlCompatible = true).html {
-            lang = språk
-            head(head)
-            body(null, body)
-        }.replace("&nbsp;", " ")
+        return createHTML(prettyPrint = false, xhtmlCompatible = true)
+            .html {
+                lang = språk
+                head(head)
+                body(null, body)
+            }.replace("&nbsp;", " ")
             .replace("\u001d", "") // Group separator character
             .replace("\u001c", "") // File separator character
     }

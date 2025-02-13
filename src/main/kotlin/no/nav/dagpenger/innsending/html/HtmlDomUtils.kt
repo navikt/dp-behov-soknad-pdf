@@ -126,14 +126,13 @@ private fun DIV.dokumentasjonKravBrutto(dokumentKrav: Innsending.DokumentKrav) {
     }
 }
 
-private fun Innsending.DokumentKrav.tittel(): String {
-    return when (this.kravSvar) {
+private fun Innsending.DokumentKrav.tittel(): String =
+    when (this.kravSvar) {
         null -> this.navn
         else -> {
             "$navn ($kravSvar)"
         }
     }
-}
 
 internal fun DIV.dokumentasjonKrav(
     dokumentKrav: List<Innsending.DokumentKrav>,
@@ -200,7 +199,10 @@ private fun DIV.dokumentKrav(
 }
 
 private fun tilleggsinformasjonOverskrift(info: Innsending.InfoTekst): String {
-    var overskrift = info.type.name.lowercase().replaceFirstChar { it.uppercase() }
+    var overskrift =
+        info.type.name
+            .lowercase()
+            .replaceFirstChar { it.uppercase() }
     if (info.tittel != null) {
         overskrift += ": ${info.tittel}"
     }

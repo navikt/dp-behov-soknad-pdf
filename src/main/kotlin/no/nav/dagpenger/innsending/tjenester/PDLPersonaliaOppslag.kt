@@ -25,7 +25,10 @@ internal interface PersonaliaOppslag {
     suspend fun hentPerson(ident: String): Personalia
 }
 
-internal class PDLPersonaliaOppslag(pdlUrl: String, private val tokenProvider: () -> String) : PersonaliaOppslag {
+internal class PDLPersonaliaOppslag(
+    pdlUrl: String,
+    private val tokenProvider: () -> String,
+) : PersonaliaOppslag {
     private val httpClient =
         HttpClient(CIO) {
             install(ContentNegotiation) {
@@ -62,8 +65,8 @@ internal class PDLPersonaliaOppslag(pdlUrl: String, private val tokenProvider: (
 
     private val personOppslag = createPersonOppslag(pdlUrl, httpClient)
 
-    override suspend fun hentPerson(ident: String): Personalia {
-        return try {
+    override suspend fun hentPerson(ident: String): Personalia =
+        try {
             personOppslag.hentPerson(ident).let {
                 Personalia(
                     navn =
@@ -80,7 +83,6 @@ internal class PDLPersonaliaOppslag(pdlUrl: String, private val tokenProvider: (
             sikkerlogg.error { "Feil ved henting av person: $ident" }
             Personalia.TOM_PERSONALIA
         }
-    }
 }
 
 internal data class Personalia(

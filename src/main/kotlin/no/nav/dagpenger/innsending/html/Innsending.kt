@@ -39,23 +39,35 @@ internal data class Innsending(
         val oppfølgingspørmål: List<SpørmsålOgSvarGruppe> = emptyList(),
     )
 
-    data class SpørmsålOgSvarGruppe(val spørsmålOgSvar: List<SporsmalSvar>)
+    data class SpørmsålOgSvarGruppe(
+        val spørsmålOgSvar: List<SporsmalSvar>,
+    )
 
     sealed class Svar
 
-    data class EnkeltSvar(var tekst: String) : Svar() {
+    data class EnkeltSvar(
+        var tekst: String,
+    ) : Svar() {
         init {
             tekst = tekst.replace("\u0002", " ")
         }
     }
 
-    data class ValgSvar(val alternativ: List<SvarAlternativ>) : Svar()
+    data class ValgSvar(
+        val alternativ: List<SvarAlternativ>,
+    ) : Svar()
 
-    data class SvarAlternativ(val tekst: String, val tilleggsinformasjon: InfoTekst?)
+    data class SvarAlternativ(
+        val tekst: String,
+        val tilleggsinformasjon: InfoTekst?,
+    )
 
     object IngenSvar : Svar()
 
-    class Hjelpetekst private constructor(val unsafeHtmlBody: UnsafeHtml?, val tittel: String? = null) {
+    class Hjelpetekst private constructor(
+        val unsafeHtmlBody: UnsafeHtml?,
+        val tittel: String? = null,
+    ) {
         companion object {
             fun nyEllerNull(
                 unsafeHtmlBody: UnsafeHtml? = null,
@@ -67,7 +79,11 @@ internal data class Innsending(
         }
     }
 
-    class InfoTekst private constructor(val tittel: String?, val unsafeHtmlBody: UnsafeHtml?, val type: Infotype) {
+    class InfoTekst private constructor(
+        val tittel: String?,
+        val unsafeHtmlBody: UnsafeHtml?,
+        val type: Infotype,
+    ) {
         companion object {
             fun nyEllerNull(
                 tittel: String? = null,
@@ -96,16 +112,17 @@ internal data class Innsending(
     ) {
         companion object {
             private val datetimeFormatter: DateTimeFormatter =
-                DateTimeFormatter.ofLocalizedDateTime(
-                    FormatStyle.LONG,
-                    FormatStyle.SHORT,
-                ).withLocale(Locale.of("no", "NO"))
+                DateTimeFormatter
+                    .ofLocalizedDateTime(
+                        FormatStyle.LONG,
+                        FormatStyle.SHORT,
+                    ).withLocale(Locale.of("no", "NO"))
         }
 
         val datoSendt: String = innsendtTidspunkt.format(datetimeFormatter)
     }
 
-    enum class Infotype() {
+    enum class Infotype {
         INFORMASJON,
         ADVARSEL,
         FEIL,
@@ -125,15 +142,16 @@ internal data class Innsending(
         }
     }
 
-    internal class UnsafeHtml(val kode: String) {
+    internal class UnsafeHtml(
+        val kode: String,
+    ) {
         // TODO: må fungere i arrays også
         // TODO: GTC Vet ikke helt hva some er hensikten med denne. Hack så det ikke tryner på Arrays
-        fun medCssKlasse(klasse: String): String {
-            return when (kode.lowercase().startsWith("<p")) {
+        fun medCssKlasse(klasse: String): String =
+            when (kode.lowercase().startsWith("<p")) {
                 true -> """<p class="$klasse"${kode.substringAfter("<p")}"""
                 else -> kode
             }
-        }
 
         companion object {
             private fun String.leggTilPåHtmlPtag(kode: String): String = """<p class="$this"${kode.substringAfter("<p")}"""
@@ -190,8 +208,7 @@ internal data class Innsending(
         beskrivelse: UnsafeHtml?,
         hjelpetekst: Hjelpetekst?,
         valg: Valg,
-    ) :
-        DokumentKrav(kravId, kravSvar, navn, beskrivelse, hjelpetekst, valg)
+    ) : DokumentKrav(kravId, kravSvar, navn, beskrivelse, hjelpetekst, valg)
 
     class IkkeInnsendtNå(
         kravId: String,
@@ -201,6 +218,5 @@ internal data class Innsending(
         beskrivelse: UnsafeHtml?,
         hjelpetekst: Hjelpetekst?,
         valg: Valg,
-    ) :
-        DokumentKrav(kravId, kravSvar, navn, beskrivelse, hjelpetekst, valg)
+    ) : DokumentKrav(kravId, kravSvar, navn, beskrivelse, hjelpetekst, valg)
 }

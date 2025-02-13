@@ -9,4 +9,9 @@ internal fun String.fileAsInputStream(): InputStream =
 
 internal fun String.fileAsByteArray(): ByteArray = this.fileAsInputStream().use { it.readAllBytes() }
 
-internal fun String.fileAsString(): String = this.fileAsInputStream().buffered().reader().use { it.readText() }
+internal fun String.fileAsString(): String =
+    this
+        .fileAsInputStream()
+        .buffered()
+        .reader()
+        .use { it.readText() }
