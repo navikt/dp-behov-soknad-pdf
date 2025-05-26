@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamdagpenger
 spec:
-  image: {{ image }}
+  image: "{{ image }}"
   port: 8080
   liveness:
     path: /isalive
@@ -16,7 +16,7 @@ spec:
     enabled: true
     path: /metrics
   kafka:
-    pool: {{ kafka_pool }}
+    pool: "{{ kafka_pool }}"
   replicas:
     min: 3
     max: 3
@@ -33,13 +33,13 @@ spec:
     - name: JDK_JAVA_OPTIONS
       value: -XX:+UseParallelGC -XX:ActiveProcessorCount=4
     - name: DP_MELLOMLAGRING_SCOPE
-      value: {{ DP_MELLOMLAGRING_SCOPE }}
+      value: "{{ DP_MELLOMLAGRING_SCOPE }}"
     - name: DP_SOKNAD_SCOPE
-      value: {{ DP_SOKNAD_SCOPE }}
+      value: "{{ DP_SOKNAD_SCOPE }}"
     - name: PDL_API_HOST
-      value: {{ PDL_API_HOST }}
+      value: "{{ PDL_API_HOST }}"
     - name: PDL_API_SCOPE
-      value: {{ PDL_API_SCOPE }}
+      value: "{{ PDL_API_SCOPE }}"
   azure:
     application:
       enabled: true
@@ -49,4 +49,4 @@ spec:
         - application: dp-mellomlagring
         - application: dp-soknad
       external:
-        - host: {{PDL_API_HOST}}
+        - host: "{{PDL_API_HOST}}"
