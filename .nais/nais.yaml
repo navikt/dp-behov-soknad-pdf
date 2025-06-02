@@ -50,3 +50,11 @@ spec:
         - application: dp-soknad
       external:
         - host: "{{PDL_API_HOST}}"
+  observability:
+    logging:
+      destinations:
+        - id: loki
+        - id: elastic
+    autoInstrumentation:
+      enabled: true
+      runtime: java
