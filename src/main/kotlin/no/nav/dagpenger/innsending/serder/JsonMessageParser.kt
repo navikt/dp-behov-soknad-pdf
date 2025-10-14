@@ -20,3 +20,5 @@ internal fun JsonMessage.innsendtTidspunkt(): ZonedDateTime = this["innsendtTids
 internal fun JsonMessage.søknadUuid(): UUID = this["søknad_uuid"].asText().let { UUID.fromString(it) }
 
 internal fun JsonNode.asZonedDateTime(): ZonedDateTime = asText().let { ZonedDateTime.parse(it) }
+
+internal fun JsonNode.asUUID(): UUID = this.asText().let { UUID.fromString(it) }
