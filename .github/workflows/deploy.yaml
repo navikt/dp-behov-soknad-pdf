@@ -28,12 +28,6 @@ jobs:
         with:
           arguments: check build installDist
 
-      - name: Publish results (unit test)
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: success() || failure()
-        with:
-          junit_files: "**/build/test-results/test/TEST-*.xml"
-
       - name: docker-build-push
         uses: nais/docker-build-push@v0
         id: docker-build-push
@@ -75,16 +69,3 @@ jobs:
           VARS: .nais/prod/vars.yaml
           PRINT_PAYLOAD: true
 
-  reportFailure:
-    name: Report build failure to Slack
-    needs: [ build ]
-    if: ${{ failure() }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"username\": \"$USERNAME\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":neutral_face:\"}" $WEBHOOK_URL
-        env:
-          USERNAME: "Github Actions"
-          MESSAGE: "The build is broken!"
-          CHANNEL: "#team-dagpenger-build"
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
