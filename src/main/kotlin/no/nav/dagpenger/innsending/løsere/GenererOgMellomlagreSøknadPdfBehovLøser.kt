@@ -52,10 +52,10 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
                 runBlocking(MDCContext()) {
                     logg.info("Mottok behov for generering av PDF for søknad $søknadId")
                     val nettoPdf = PdfBuilder.lagPdf(nettoPayload)
-                    val bruttePdf = PdfBuilder.lagPdf(bruttoPayload)
+                    val bruttoPdf = PdfBuilder.lagPdf(bruttoPayload)
                     listOf(
                         ArkiverbartDokument.netto(nettoPdf),
-                        ArkiverbartDokument.brutto(bruttePdf),
+                        ArkiverbartDokument.brutto(bruttoPdf),
                     ).let { arkivbareDokumenter ->
                         pdfLagring
                             .lagrePdf(
