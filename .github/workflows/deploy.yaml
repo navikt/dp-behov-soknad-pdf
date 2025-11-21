@@ -18,7 +18,7 @@ jobs:
       checks: "write"
       id-token: "write"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -45,7 +45,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
@@ -60,7 +60,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
