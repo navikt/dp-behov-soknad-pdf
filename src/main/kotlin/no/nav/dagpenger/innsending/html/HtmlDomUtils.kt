@@ -1,5 +1,6 @@
 package no.nav.dagpenger.innsending.html
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.html.DIV
 import kotlinx.html.HEAD
 import kotlinx.html.div
@@ -13,7 +14,6 @@ import kotlinx.html.p
 import kotlinx.html.span
 import kotlinx.html.ul
 import kotlinx.html.unsafe
-import mu.KotlinLogging
 import no.nav.dagpenger.innsending.html.Innsending.GenerellTekst
 import no.nav.dagpenger.innsending.html.Innsending.SporsmalSvar
 

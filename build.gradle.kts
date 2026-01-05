@@ -81,7 +81,7 @@ tasks.named("compileKotlin") {
     dependsOn("spotlessCheck")
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
     testLogging {
         showExceptions = true
