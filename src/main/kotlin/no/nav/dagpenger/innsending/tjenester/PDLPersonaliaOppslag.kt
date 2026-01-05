@@ -3,6 +3,7 @@ package no.nav.dagpenger.innsending.tjenester
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpRequestRetry
@@ -13,7 +14,6 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.serialization.jackson.jackson
-import mu.KotlinLogging
 import no.nav.dagpenger.pdl.adresse.AdresseVisitor
 import no.nav.dagpenger.pdl.createPersonOppslag
 import kotlin.time.Duration.Companion.seconds
