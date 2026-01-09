@@ -55,7 +55,7 @@ dependencies {
     testImplementation("de.redsix:pdfcompare:1.1.61")
 
     // FOr E2E
-    testImplementation("io.kubernetes:client-java:22.0.1-legacy")
+    testImplementation("io.kubernetes:client-java:25.0.0-legacy")
 }
 
 // TODO: Kan fjernes når pakken som drar inn denne avhengigheten oppdateres (com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10)
