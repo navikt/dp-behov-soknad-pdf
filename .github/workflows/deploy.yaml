@@ -42,7 +42,7 @@ jobs:
   deploy-dev:
     name: Deploy to dev
     needs: [ build ]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/ignorer_feilende_soknad'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -54,18 +54,18 @@ jobs:
           VARS: .nais/dev/vars.yaml
           PRINT_PAYLOAD: true
 
-  deploy-prod:
-    name: Deploy to Production
-    needs: [ deploy-dev, build ]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: nais/deploy/actions/deploy@v2
-        env:
-          CLUSTER: prod-gcp
-          RESOURCE: .nais/nais.yaml
-          VAR: image=${{ needs.build.outputs.image }}
-          VARS: .nais/prod/vars.yaml
-          PRINT_PAYLOAD: true
+#  deploy-prod:
+#    name: Deploy to Production
+#    needs: [ deploy-dev, build ]
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v6
+#      - uses: nais/deploy/actions/deploy@v2
+#        env:
+#          CLUSTER: prod-gcp
+#          RESOURCE: .nais/nais.yaml
+#          VAR: image=${{ needs.build.outputs.image }}
+#          VARS: .nais/prod/vars.yaml
+#          PRINT_PAYLOAD: true
 

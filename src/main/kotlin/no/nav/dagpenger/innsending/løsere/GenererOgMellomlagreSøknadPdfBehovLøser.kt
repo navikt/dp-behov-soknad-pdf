@@ -25,6 +25,10 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
         private val logg = KotlinLogging.logger {}
         private val sikkerLogg = KotlinLogging.logger("tjenestekall.${this::class.java.simpleName}")
         const val BEHOV = "generer_og_mellomlagre_søknad_pdf"
+        private val `søknadIdLogAndSkipSet` =
+            setOf(
+                "cbcd53f8-cc00-4bf0-ae44-27656043ddaa",
+            )
     }
 
     init {
@@ -51,6 +55,14 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
             try {
                 runBlocking(MDCContext()) {
                     logg.info("Mottok behov for generering av PDF for søknad $søknadId")
+
+                    if (søknadIdLogAndSkipSet.contains(søknadId.toString())) {
+                        logg.info { "$søknadId er i logAndSkipSet, så logger og skipper denne" }
+                        sikkerLogg.info { "NettoPayload $søknadId: $nettoPayload" }
+                        sikkerLogg.info { "BruttoPayload $søknadId: $bruttoPayload" }
+                        return@runBlocking
+                    }
+
                     val nettoPdf = PdfBuilder.lagPdf(nettoPayload)
                     val bruttoPdf = PdfBuilder.lagPdf(bruttoPayload)
                     listOf(
