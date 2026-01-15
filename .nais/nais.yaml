@@ -27,8 +27,6 @@ spec:
     requests:
       cpu: 100m
       memory: 768Mi
-  secureLogs:
-    enabled: true
   env:
     - name: JDK_JAVA_OPTIONS
       value: -XX:+UseParallelGC -XX:ActiveProcessorCount=4
