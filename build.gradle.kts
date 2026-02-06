@@ -36,9 +36,9 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.jackson)
     implementation(libs.jackson.datatype.jsr310)
-    implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10")
-    implementation("com.openhtmltopdf:openhtmltopdf-slf4j:1.0.10")
-    implementation("com.openhtmltopdf:openhtmltopdf-svg-support:1.0.10")
+    implementation("io.github.openhtmltopdf:openhtmltopdf-pdfbox:1.1.37")
+    implementation("io.github.openhtmltopdf:openhtmltopdf-slf4j:1.1.37")
+    implementation("io.github.openhtmltopdf:openhtmltopdf-svg-support:1.1.37")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
     implementation("org.jsoup:jsoup:1.22.1")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
@@ -52,7 +52,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5-jvm:6.1.2")
     testImplementation(libs.ktor.client.mock)
     testImplementation("org.verapdf:validation-model:1.28.2")
-    testImplementation("de.redsix:pdfcompare:1.1.61")
+    testImplementation("de.redsix:pdfcompare:1.2.8")
 
     // FOr E2E
     testImplementation("io.kubernetes:client-java:25.0.0-legacy")
