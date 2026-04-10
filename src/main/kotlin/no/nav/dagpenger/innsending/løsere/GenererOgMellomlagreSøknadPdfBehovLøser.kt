@@ -16,6 +16,7 @@ import no.nav.dagpenger.innsending.pdf.PdfBuilder
 import no.nav.dagpenger.innsending.pdf.PdfLagring
 import no.nav.dagpenger.innsending.serder.asUUID
 import no.nav.dagpenger.innsending.serder.ident
+import java.util.UUID
 
 internal class GenererOgMellomlagreSøknadPdfBehovLøser(
     rapidsConnection: RapidsConnection,
@@ -48,6 +49,7 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
         val nettoPayload = packet["nettoPayload"].asText()
         val bruttoPayload = packet["bruttoPayload"].asText()
         withLoggingContext("søknadId" to søknadId.toString()) {
+            if (søknadId == UUID.fromString("67e9b258-f57f-41eb-9b7e-0bd86d9a7a8d")) return
             try {
                 runBlocking(MDCContext()) {
                     logg.info("Mottok behov for generering av PDF for søknad $søknadId")
