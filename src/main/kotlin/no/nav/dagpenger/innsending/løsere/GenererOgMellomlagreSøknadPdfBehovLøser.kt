@@ -44,6 +44,15 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
         meterRegistry: MeterRegistry,
     ) {
         val søknadId = packet["søknadId"].asUUID()
+        val ignorerSøknadIder =
+            listOf(
+                "fb774432-3801-4737-8914-fd8af550ff3e",
+                "1eb49db5-8387-4946-9b32-9f9d24caa944",
+                "34a2c4aa-4b2e-49d0-98a7-09dffb806291",
+            )
+
+        if (søknadId.toString() in ignorerSøknadIder) return
+
         val ident = packet.ident()
         val nettoPayload = packet["nettoPayload"].asText()
         val bruttoPayload = packet["bruttoPayload"].asText()
