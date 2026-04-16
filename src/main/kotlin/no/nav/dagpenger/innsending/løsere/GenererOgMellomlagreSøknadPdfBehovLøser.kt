@@ -52,6 +52,7 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
                 "5a2ada17-e1c0-473a-880d-ccaafc637a6f",
                 "e46f72c3-a490-4bab-a29b-e1bf2705bbb5",
                 "25d09010-4e2d-4ce0-bc1e-98917ad84085",
+                "00a350d6-c3e1-4a8f-b756-6714be1cb089",
             )
 
         if (søknadId.toString() in ignorerSøknadIder) return
