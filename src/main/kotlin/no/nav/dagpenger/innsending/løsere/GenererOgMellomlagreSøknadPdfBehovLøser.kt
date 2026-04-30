@@ -44,7 +44,7 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
         meterRegistry: MeterRegistry,
     ) {
         val søknadId = packet["søknadId"].asUUID()
-        if (søknadId.toString() == "4c193d52-3d64-4057-806d-963f1eb5bdfa") {
+        if (søknadId.toString() == "95f960d4-e377-4988-8232-5bac3f37c12a") {
             logg.info { "Mottok behov for generering av PDF for søknad $søknadId, skipper" }
             return
         }
