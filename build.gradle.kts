@@ -43,7 +43,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.22.2")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
     implementation("org.apache.commons:commons-text:1.15.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.11.0")
     implementation("no.nav.pam.geography:pam-geography:2.23")
 
     testImplementation(kotlin("test"))
