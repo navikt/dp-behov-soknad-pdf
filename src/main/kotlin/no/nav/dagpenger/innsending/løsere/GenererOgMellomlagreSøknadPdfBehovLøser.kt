@@ -45,6 +45,11 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
     ) {
         val søknadId = packet["søknadId"].asUUID()
 
+        if (søknadId.toString() == "8feb4a0a-2346-44b9-a3e2-e438d05598b8") {
+            logg.info { "Mottok behov for generering av PDF for søknad $søknadId, men ignorerer dem feiler" }
+            return
+        }
+
         val ident = packet.ident()
         val nettoPayload = packet["nettoPayload"].asText()
         val bruttoPayload = packet["bruttoPayload"].asText()
