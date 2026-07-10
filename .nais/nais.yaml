@@ -32,12 +32,6 @@ spec:
       value: -XX:+UseParallelGC -XX:ActiveProcessorCount=4
     - name: DP_MELLOMLAGRING_SCOPE
       value: "{{ DP_MELLOMLAGRING_SCOPE }}"
-    - name: DP_SOKNAD_SCOPE
-      value: "{{ DP_SOKNAD_SCOPE }}"
-    - name: PDL_API_HOST
-      value: "{{ PDL_API_HOST }}"
-    - name: PDL_API_SCOPE
-      value: "{{ PDL_API_SCOPE }}"
   azure:
     application:
       enabled: true
@@ -47,9 +41,6 @@ spec:
         - application: logging
           namespace: nais-system
         - application: dp-mellomlagring
-        - application: dp-soknad
-      external:
-        - host: "{{PDL_API_HOST}}"
   observability:
     logging:
       destinations:
