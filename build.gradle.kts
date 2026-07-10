@@ -52,7 +52,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5-jvm:6.2.1")
     testImplementation(libs.ktor.client.mock)
     testImplementation("org.verapdf:validation-model:1.30.2")
-    testImplementation("de.redsix:pdfcompare:1.2.8")
+    testImplementation("de.redsix:pdfcompare:1.2.9")
 
     // FOr E2E
     testImplementation("io.kubernetes:client-java:25.0.0-legacy")
