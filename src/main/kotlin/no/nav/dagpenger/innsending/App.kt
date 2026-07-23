@@ -4,7 +4,6 @@ import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import no.nav.dagpenger.innsending.html.InnsendingSupplier
 import no.nav.dagpenger.innsending.løsere.EttersendingPdfBehovLøser
 import no.nav.dagpenger.innsending.løsere.GenererOgMellomlagreSøknadPdfBehovLøser
-import no.nav.dagpenger.innsending.løsere.NyDialogPdfBehovLøser
 import no.nav.dagpenger.innsending.løsere.RapporteringPdfBehovLøser
 import no.nav.dagpenger.innsending.pdf.PdfLagring
 import no.nav.dagpenger.innsending.tjenester.PDLPersonaliaOppslag
@@ -24,20 +23,6 @@ internal object App : RapidsConnection.StatusListener {
                 tokenProvider = Configuration.pdlTokenSupplier,
             )
         rapidsConnection.register(this)
-        NyDialogPdfBehovLøser(
-            rapidsConnection = rapidsConnection,
-            pdfLagring =
-                PdfLagring(
-                    baseUrl = Configuration.dpMellomlagringBaseUrl,
-                    tokenSupplier = Configuration.mellomlagringTokenSupplier,
-                ),
-            innsendingSupplier =
-                InnsendingSupplier(
-                    dpSoknadBaseUrl = Configuration.dpSoknadUrl,
-                    tokenSupplier = Configuration.soknadTokenSupplier,
-                    personaliOppslag = personaliaOppslag,
-                ),
-        )
         EttersendingPdfBehovLøser(
             rapidsConnection = rapidsConnection,
             pdfLagring =

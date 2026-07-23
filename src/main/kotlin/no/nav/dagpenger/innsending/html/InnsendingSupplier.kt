@@ -42,35 +42,6 @@ internal class InnsendingSupplier(
         GENERELL,
     }
 
-    suspend fun hentSoknad(
-        id: UUID,
-        fnr: String,
-        innsendtTidspunkt: ZonedDateTime,
-        språk: Innsending.InnsendingsSpråk,
-        innsendingType: InnsendingType,
-    ): Innsending =
-        withContext(Dispatchers.IO) {
-            val fakta = async { hentFakta(id) }
-            val tekst = async { hentTekst(id) }
-            val dokumentasjonsKrav = async { hentDokumentasjonKrav(id) }
-            val deferredPerson = async { personaliOppslag.hentPerson(fnr) }
-            JsonHtmlMapper(
-                innsendingsData = fakta.await(),
-                dokumentasjonKrav = dokumentasjonsKrav.await(),
-                tekst = tekst.await(),
-                språk = språk,
-            ).parse(innsendingType).also {
-                val person = deferredPerson.await()
-                it.infoBlokk =
-                    Innsending.InfoBlokk(
-                        fødselsnummer = fnr,
-                        innsendtTidspunkt = innsendtTidspunkt,
-                        navn = person.navn.formatertNavn,
-                        adresse = person.adresse.formatertAdresse,
-                    )
-            }
-        }
-
     suspend fun hentEttersending(
         id: UUID,
         fnr: String,

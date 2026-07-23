@@ -42,14 +42,6 @@ internal class LagretDokument(
     }
 }
 
-internal fun lagArkiverbartDokument(innsending: Innsending): List<ArkiverbartDokument> =
-    listOf(
-        ArkiverbartDokument.netto(HtmlBuilder.lagNettoHtml(innsending).let { PdfBuilder.lagPdf(it) }),
-        ArkiverbartDokument.brutto(
-            HtmlBuilder.lagBruttoHtml(innsending).let { PdfBuilder.lagPdf(it) },
-        ),
-    )
-
 internal fun lagArkiverbarEttersending(innsending: Innsending): List<ArkiverbartDokument> =
     listOf(
         ArkiverbartDokument.netto(HtmlBuilder.lagEttersendingHtml(innsending).let { PdfBuilder.lagPdf(it) }),
