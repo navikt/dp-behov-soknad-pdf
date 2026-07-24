@@ -47,7 +47,6 @@ spec:
         - application: logging
           namespace: nais-system
         - application: dp-mellomlagring
-        - application: dp-soknad
       external:
         - host: "{{PDL_API_HOST}}"
   observability:
