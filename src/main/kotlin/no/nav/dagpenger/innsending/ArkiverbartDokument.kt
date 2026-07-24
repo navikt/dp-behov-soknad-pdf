@@ -1,9 +1,5 @@
 package no.nav.dagpenger.innsending
 
-import no.nav.dagpenger.innsending.html.HtmlBuilder
-import no.nav.dagpenger.innsending.html.Innsending
-import no.nav.dagpenger.innsending.pdf.PdfBuilder
-
 internal class ArkiverbartDokument private constructor(
     val variant: DokumentVariant,
     val pdf: ByteArray,
@@ -41,8 +37,3 @@ internal class LagretDokument(
             }
     }
 }
-
-internal fun lagArkiverbarEttersending(innsending: Innsending): List<ArkiverbartDokument> =
-    listOf(
-        ArkiverbartDokument.netto(HtmlBuilder.lagEttersendingHtml(innsending).let { PdfBuilder.lagPdf(it) }),
-    )
