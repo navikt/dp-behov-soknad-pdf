@@ -1,10 +1,8 @@
 # Dp-behov-søknad-pdf
 
-Løser behov fra [dp-soknad](https://github.com/navikt/dp-soknad) om generering av PDF/A for journalføring
+Løser behov om generering av PDF/A for journalføring
 * Netto versjon: Inneholder spørsmål med svar fra bruker
 * Brutto inneholder alt bruker har sett av tekst (spørsmål, hjelpetekster, beskrivelser osv)
-
-Henter søknaddata og tekster via REST fra dp-soknad.
 
 ## Komme i gang
 

@@ -30,7 +30,6 @@ dependencies {
     implementation(libs.konfig)
     implementation(libs.kotlin.logging)
     implementation("no.nav.dagpenger:oauth2-klient:2025.12.19-08.15.2e150cd55270")
-    implementation("no.nav.dagpenger:pdl-klient:2025.12.19-08.15.2e150cd55270")
     implementation(libs.ktor.client.logging.jvm)
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
@@ -53,9 +52,6 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     testImplementation("org.verapdf:validation-model:1.30.2")
     testImplementation("de.redsix:pdfcompare:1.2.9")
-
-    // FOr E2E
-    testImplementation("io.kubernetes:client-java:25.0.0-legacy")
 }
 
 // TODO: Kan fjernes når pakken som drar inn denne avhengigheten oppdateres (com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10)

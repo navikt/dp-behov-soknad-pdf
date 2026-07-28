@@ -11,9 +11,14 @@ internal data class Innsending(
     val språk: InnsendingsSpråk,
     val pdfAMetaTagger: PdfAMetaTagger,
     val dokumentasjonskrav: List<DokumentKrav>,
-    val type: InnsendingSupplier.InnsendingType = InnsendingSupplier.InnsendingType.DAGPENGER,
+    val type: InnsendingType = InnsendingType.DAGPENGER,
 ) {
     lateinit var infoBlokk: InfoBlokk
+
+    enum class InnsendingType {
+        DAGPENGER,
+        GENERELL,
+    }
 
     open class PdfAMetaTagger(
         val description: String,

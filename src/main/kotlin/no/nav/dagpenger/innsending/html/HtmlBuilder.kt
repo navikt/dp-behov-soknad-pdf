@@ -82,7 +82,7 @@ internal object HtmlBuilder {
                             brutto,
                         )
                         // todo engelsk tekst. Hack
-                        if (innsending.type == InnsendingSupplier.InnsendingType.DAGPENGER) {
+                        if (innsending.type == Innsending.InnsendingType.DAGPENGER) {
                             if (innsending.språk == BOKMÅL) {
                                 @Suppress("ktlint:standard:max-line-length")
                                 p {

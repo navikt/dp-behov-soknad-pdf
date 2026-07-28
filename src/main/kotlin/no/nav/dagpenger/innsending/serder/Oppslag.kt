@@ -7,7 +7,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.withLoggingContext
 import no.nav.dagpenger.innsending.html.Innsending
-import no.nav.dagpenger.innsending.html.InnsendingSupplier
 import no.nav.dagpenger.innsending.serder.Oppslag.TekstObjekt.DokumentkravTekstObjekt
 import no.nav.dagpenger.innsending.serder.Oppslag.TekstObjekt.EnkelText
 import no.nav.dagpenger.innsending.serder.Oppslag.TekstObjekt.FaktaTekstObjekt
@@ -194,11 +193,11 @@ internal class Oppslag(
         }
     }
 
-    internal fun generellTekst(innsendingType: InnsendingSupplier.InnsendingType): Innsending.GenerellTekst {
+    internal fun generellTekst(innsendingType: Innsending.InnsendingType): Innsending.GenerellTekst {
         val tittel =
             when (innsendingType) {
-                InnsendingSupplier.InnsendingType.DAGPENGER -> lookup<EnkelText>("soknad.header.tittel").text
-                InnsendingSupplier.InnsendingType.GENERELL -> lookup<EnkelText>("pdf.generell-innsending.hovedoverskrift").text
+                Innsending.InnsendingType.DAGPENGER -> lookup<EnkelText>("soknad.header.tittel").text
+                Innsending.InnsendingType.GENERELL -> lookup<EnkelText>("pdf.generell-innsending.hovedoverskrift").text
             }
         return Innsending.GenerellTekst(
             hovedOverskrift = tittel,
