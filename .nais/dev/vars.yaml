@@ -1,5 +1,2 @@
 kafka_pool: nav-dev
 DP_MELLOMLAGRING_SCOPE: "api://dev-gcp.teamdagpenger.dp-mellomlagring/.default"
-DP_SOKNAD_SCOPE: "api://dev-gcp.teamdagpenger.dp-soknad/.default"
-PDL_API_HOST: "pdl-api.dev-fss-pub.nais.io"
-PDL_API_SCOPE: "api://dev-fss.pdl.pdl-api/.default"
