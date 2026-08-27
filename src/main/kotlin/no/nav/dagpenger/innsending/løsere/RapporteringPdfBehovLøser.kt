@@ -1,8 +1,5 @@
 package no.nav.dagpenger.innsending.løsere
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.JsonNodeType
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers.River
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
@@ -25,6 +22,9 @@ import no.nav.dagpenger.innsending.html.søknadPdfStyle
 import no.nav.dagpenger.innsending.pdf.PdfBuilder
 import no.nav.dagpenger.innsending.pdf.PdfLagring
 import no.nav.dagpenger.innsending.serder.ident
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.node.JsonNodeType
+import tools.jackson.module.kotlin.jacksonObjectMapper
 
 internal class RapporteringPdfBehovLøser(
     rapidsConnection: RapidsConnection,
@@ -68,7 +68,7 @@ internal class RapporteringPdfBehovLøser(
         ) {
             try {
                 runBlocking(MDCContext()) {
-                    logg.info("Mottok behov for PDF av rapportering")
+                    logg.info { "Mottok behov for PDF av rapportering" }
 
                     // pre-tagen fungerer ikke, derfor må vi gjøre formatering selv
                     val html =
@@ -120,7 +120,7 @@ internal class RapporteringPdfBehovLøser(
         indent: String,
     ): DIV.() -> Unit =
         {
-            val iterator = json.fields()
+            val iterator = json.properties().iterator()
             while (iterator.hasNext()) {
                 val item = iterator.next()
 
@@ -128,6 +128,10 @@ internal class RapporteringPdfBehovLøser(
                     div { +"$indent ${item.key}: {" }
                     div(null, iterate(item.value, "  $indent"))
                     div { +"$indent }" }
+                } else if (item.value.nodeType == JsonNodeType.ARRAY) {
+                    div {
+                        +"$indent ${item.key}: "
+                    }
                 } else {
                     div {
                         +"$indent ${item.key}: ${item.value.asText()}"

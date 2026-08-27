@@ -51,7 +51,7 @@ internal class GenererOgMellomlagreSøknadPdfBehovLøser(
         withLoggingContext("søknadId" to søknadId.toString()) {
             try {
                 runBlocking(MDCContext()) {
-                    logg.info("Mottok behov for generering av PDF for søknad $søknadId")
+                    logg.info { "Mottok behov for generering av PDF for søknad $søknadId" }
                     val nettoPdf = PdfBuilder.lagPdf(nettoPayload)
                     val bruttoPdf = PdfBuilder.lagPdf(bruttoPayload)
                     listOf(

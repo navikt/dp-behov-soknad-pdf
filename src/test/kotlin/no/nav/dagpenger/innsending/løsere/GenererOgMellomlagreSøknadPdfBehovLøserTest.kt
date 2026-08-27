@@ -2,7 +2,6 @@
 
 package no.nav.dagpenger.innsending.løsere
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
@@ -15,6 +14,7 @@ import no.nav.dagpenger.innsending.løsere.GenererOgMellomlagreSøknadPdfBehovL�
 import no.nav.dagpenger.innsending.pdf.PdfLagring
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
+import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.util.UUID
 
 internal class GenererOgMellomlagreSøknadPdfBehovLøserTest {

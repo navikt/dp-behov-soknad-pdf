@@ -1,7 +1,5 @@
 package no.nav.dagpenger.innsending.pdf
 
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
@@ -16,7 +14,7 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.serialization.jackson.jackson
+import io.ktor.serialization.jackson3.jackson
 import no.nav.dagpenger.innsending.ArkiverbartDokument
 import no.nav.dagpenger.innsending.LagretDokument
 import java.time.ZonedDateTime
@@ -33,8 +31,6 @@ class PdfLagring(
             }
             install(ContentNegotiation) {
                 jackson {
-                    registerModule(JavaTimeModule())
-                    disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 }
             }
             install(Logging) {

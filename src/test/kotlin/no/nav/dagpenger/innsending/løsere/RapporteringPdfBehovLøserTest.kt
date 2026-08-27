@@ -1,7 +1,5 @@
 package no.nav.dagpenger.innsending.løsere
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import de.redsix.pdfcompare.CompareResultImpl
 import de.redsix.pdfcompare.PdfComparator
@@ -13,6 +11,8 @@ import no.nav.dagpenger.innsending.ArkiverbartDokument.DokumentVariant.NETTO
 import no.nav.dagpenger.innsending.LagretDokument
 import no.nav.dagpenger.innsending.pdf.PdfLagring
 import org.junit.jupiter.api.Test
+import tools.jackson.databind.JsonNode
+import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.io.File
 import kotlin.test.assertEquals
 
