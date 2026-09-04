@@ -34,7 +34,7 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.jackson)
-    implementation("io.github.openhtmltopdf:openhtmltopdf-pdfbox:1.1.49")
+    implementation("io.github.openhtmltopdf:openhtmltopdf-pdfbox:1.1.85")
     implementation("io.github.openhtmltopdf:openhtmltopdf-slf4j:1.1.85")
     implementation("io.github.openhtmltopdf:openhtmltopdf-svg-support:1.1.85")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
