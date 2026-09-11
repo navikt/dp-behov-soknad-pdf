@@ -29,7 +29,7 @@ dependencies {
     implementation(libs.rapids.and.rivers)
     implementation(libs.konfig)
     implementation(libs.kotlin.logging)
-    implementation("no.nav.dagpenger:oauth2-klient:2025.12.19-08.15.2e150cd55270")
+    implementation("no.nav.dagpenger:oauth2-klient:2026.09.11-06.18.3bec782ce866")
     implementation(libs.ktor.client.logging.jvm)
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
