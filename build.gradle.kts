@@ -48,7 +48,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5-jvm:6.2.5")
     testImplementation(libs.ktor.client.mock)
     testImplementation("org.verapdf:validation-model:1.30.2")
-    testImplementation("de.redsix:pdfcompare:1.2.9")
+    testImplementation("de.redsix:pdfcompare:1.2.11")
 }
 
 // TODO: Kan fjernes når pakken som drar inn denne avhengigheten oppdateres (com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10)
