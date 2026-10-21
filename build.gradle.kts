@@ -54,7 +54,7 @@ dependencies {
 // TODO: Kan fjernes når pakken som drar inn denne avhengigheten oppdateres (com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10)
 dependencies {
     constraints {
-        implementation("org.apache.xmlgraphics:batik-bridge:1.19") {
+        implementation("org.apache.xmlgraphics:batik-bridge:1.20") {
             because("Versjon 1.14 har sårbarheter.")
         }
     }
